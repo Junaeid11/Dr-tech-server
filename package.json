@@ -1,16 +1,19 @@
 {
   "name": "job-task-dr-tech",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "ts-node src/server.ts",
-    "dev": "nodemon src/server.ts"
+    "start": "node dist/server.js",
+    "dev": "nodemon src/server.ts",
+    "build": "tsc && npm run copy-public",
+    "copy-public": "cp -r public dist/ || xcopy public dist\\public /E /I /Y",
+    "postinstall": "npm run build"
   },
   "keywords": [],
-  "author": "",
+  "author": "Junaeid Ahmed Tanim",
   "license": "ISC",
-  "description": "",
+  "description": "A comprehensive REST API for managing doctor-patient appointments",
   "dependencies": {
     "bcryptjs": "^3.0.2",
     "dotenv": "^16.6.0",

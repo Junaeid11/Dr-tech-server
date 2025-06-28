@@ -2,6 +2,12 @@
 
 A comprehensive REST API for managing doctor-patient appointments with authentication, role-based access control, and real-time appointment status tracking.
 
+## 🌐 Live Application
+
+**🔗 Live Demo**: [dr-tech.vercel.app](https://dr-tech.vercel.app)
+
+---
+
 ## 👨‍💻 Author
 
 **Junaeid Ahmed Tanim**  

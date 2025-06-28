@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Junaeid Ahmed Tanim - Doctor-Patient Appointment API</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .developer-info {
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            margin-bottom: 2rem;
+        }
+
+        .developer-info h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .developer-info .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 1rem;
+        }
+
+        .developer-info a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border: 2px solid white;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .developer-info a:hover {
+            background: white;
+            color: #667eea;
+        }
+
+        .api-info h3 {
+            color: #667eea;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .feature-item {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .tech-tag {
+            background: #667eea;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .endpoints {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+
+        .endpoint {
+            margin-bottom: 0.5rem;
+            font-family: 'Courier New', monospace;
+            color: #667eea;
+        }
+
+        .status-badge {
+            display: inline-block;
+            background: #28a745;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            margin-left: 1rem;
+        }
+
+        .footer {
+            text-align: center;
+            color: white;
+            margin-top: 3rem;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .developer-info h2 {
+                font-size: 2rem;
+            }
+            
+            .developer-info .contact-links {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏥 Doctor-Patient Appointment API</h1>
+            <p>A comprehensive REST API for managing doctor-patient appointments</p>
+        </div>
+
+        <div class="card developer-info">
+            <h2>👨‍💻 Junaeid Ahmed Tanim</h2>
+            <p>Full Stack Developer & API Specialist</p>
+            <div class="contact-links">
+                <a href="mailto:junaeidahmed979@gmail.com">📧 Email</a>
+                <a href="https://noobwork.me" target="_blank">🌐 Portfolio</a>
+                <a href="https://github.com/Junaeid11" target="_blank">📚 GitHub</a>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>📚 API Endpoints</h3>
+            <div class="endpoints">
+                <h4>Authentication</h4>
+                <div class="endpoint">POST /auth/register-doctor</div>
+                <div class="endpoint">POST /auth/register-patient</div>
+                <div class="endpoint">POST /auth/login</div>
+                
+                <h4>Patient Endpoints</h4>
+                <div class="endpoint">GET /patients/doctor</div>
+                <div class="endpoint">POST /patients/appointments</div>
+                <div class="endpoint">GET /patients/appointments</div>
+                
+                <h4>Doctor Endpoints</h4>
+                <div class="endpoint">GET /doctors/:id/appointments</div>
+                <div class="endpoint">PATCH /doctors/appointments/:id/status</div>
+                <div class="endpoint">POST /doctors/:id/services</div>
+                <div class="endpoint">POST /doctors/:id/availability</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>🔗 Quick Links</h3>
+            <div class="endpoints">
+              
+                <div class="endpoint">📋 <a href="https://github.com/Junaeid11/Dr-tech-server" style="color: #667eea;">GitHub Repository</a></div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>© 2025 Junaeid Ahmed Tanim. Built with ❤️ and TypeScript.</p>
+            <p>Ready to collaborate? Let's build something amazing together!</p>
+        </div>
+    </div>
+
+    <script>
+        // Add some interactive features
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add smooth scrolling
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            // Add typing effect to the title
+            const title = document.querySelector('.header h1');
+            const originalText = title.textContent;
+            title.textContent = '';
+            
+            let i = 0;
+            const typeWriter = () => {
+                if (i < originalText.length) {
+                    title.textContent += originalText.charAt(i);
+                    i++;
+                    setTimeout(typeWriter, 100);
+                }
+            };
+            
+            setTimeout(typeWriter, 1000);
+        });
+    </script>
+</body>
+</html> 
