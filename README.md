@@ -322,7 +322,7 @@ Content-Type: application/json
 #### 5. Get Available Time Slots
 ```http
 GET /doctors/507f1f77bcf86cd799439011/507f1f77bcf86cd799439012/available-slots/2024-01-20
-Authorization: Bearer YOUR_DOCTOR_TOKEN
+Authorization: YOUR_DOCTOR_TOKEN
 ```
 
 ## 🔐 Authentication
