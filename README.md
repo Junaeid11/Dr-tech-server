@@ -10,7 +10,7 @@ A comprehensive REST API for managing doctor-patient appointments with authentic
 
 ---
 
-## �� Table of Contents
+## 📋 Table of Contents
 
 - [Features](#-features)
 - [Tech Stack](#-tech-stack)
@@ -140,10 +140,25 @@ npm start
 
 ```bash
 npm run dev          # Start development server with nodemon
-npm run build        # Build TypeScript to JavaScript
-npm start           # Start production server
-npm run test        # Run tests (if configured)
+npm start           # Start production server with ts-node
+npm test            # Run tests (currently not configured)
 ```
+
+### Postman Collection
+
+The project includes a complete Postman collection file: `Dr tech.postman_collection.json`
+
+This collection contains all the API endpoints with:
+- Pre-configured requests for all endpoints
+- Example request bodies
+- Environment variables setup
+- Authentication headers
+- Response examples
+
+To use the collection:
+1. Import `Dr tech.postman_collection.json` into Postman
+2. Set up the environment variables
+3. Start testing the API endpoints
 
 ## 📚 API Documentation
 
@@ -214,7 +229,7 @@ Content-Type: application/json
 #### 1. Book Appointment
 ```http
 POST /patients/appointments
-Authorization:  YOUR_PATIENT_TOKEN
+Authorization: YOUR_PATIENT_TOKEN
 Content-Type: application/json
 
 {
@@ -228,19 +243,19 @@ Content-Type: application/json
 #### 2. Get Patient Appointments
 ```http
 GET /patients/appointments?status=pending
-Authorization:  YOUR_PATIENT_TOKEN
+Authorization: YOUR_PATIENT_TOKEN
 ```
 
 #### 3. Get All Doctors
 ```http
 GET /patients/doctor
-Authorization:  YOUR_PATIENT_TOKEN
+Authorization: YOUR_PATIENT_TOKEN
 ```
 
 #### 4. Get Doctor by ID
 ```http
 GET /patients/doctor/507f1f77bcf86cd799439011
-Authorization:  YOUR_PATIENT_TOKEN
+Authorization: YOUR_PATIENT_TOKEN
 ```
 
 ### Doctor Endpoints
@@ -248,13 +263,13 @@ Authorization:  YOUR_PATIENT_TOKEN
 #### 1. Get Doctor Appointments
 ```http
 GET /doctors/507f1f77bcf86cd799439011/appointments?status=pending
-Authorization: Bearer YOUR_DOCTOR_TOKEN
+Authorization: YOUR_DOCTOR_TOKEN
 ```
 
 #### 2. Update Appointment Status
 ```http
 PATCH /doctors/appointments/507f1f77bcf86cd799439013/status
-Authorization:  YOUR_DOCTOR_TOKEN
+Authorization: YOUR_DOCTOR_TOKEN
 Content-Type: application/json
 
 {
@@ -266,7 +281,7 @@ Content-Type: application/json
 #### 3. Add Service
 ```http
 POST /doctors/507f1f77bcf86cd799439011/services
-Authorization: Bearer YOUR_DOCTOR_TOKEN
+Authorization: YOUR_DOCTOR_TOKEN
 Content-Type: application/json
 
 {
@@ -280,7 +295,7 @@ Content-Type: application/json
 #### 4. Set Availability
 ```http
 POST /doctors/507f1f77bcf86cd799439011/availability
-Authorization: Bearer YOUR_DOCTOR_TOKEN
+Authorization: YOUR_DOCTOR_TOKEN
 Content-Type: application/json
 
 {
@@ -307,7 +322,7 @@ Content-Type: application/json
 #### 5. Get Available Time Slots
 ```http
 GET /doctors/507f1f77bcf86cd799439011/507f1f77bcf86cd799439012/available-slots/2024-01-20
-Authorization:  YOUR_DOCTOR_TOKEN
+Authorization: Bearer YOUR_DOCTOR_TOKEN
 ```
 
 ## 🔐 Authentication
@@ -317,7 +332,7 @@ Authorization:  YOUR_DOCTOR_TOKEN
 All protected endpoints require a valid JWT token in the Authorization header:
 
 ```http
-Authorization: Bearer YOUR_JWT_TOKEN
+Authorization:  YOUR_JWT_TOKEN
 ```
 
 ### Role-based Access
@@ -355,8 +370,6 @@ Create a new environment in Postman with these variables:
 3. **Set tokens in environment variables**
 4. **Test appointment booking flow**
 
-
-
 ## 🔄 Appointment Flow
 
 ### Complete Workflow
@@ -379,32 +392,65 @@ Accepted → Completed (Appointment finished)
 Accepted → Cancelled (Time slot becomes available)
 ```
 
-
-
-```
-
 ## 📁 Project Structure
 
 ```
-src/
-├── app.ts                 # Express app configuration
-├── server.ts             # Server entry point
-├── middleware/
-│   ├── auth.ts           # Authentication middleware
-│   ├── errorHandler.ts   # Error handling middleware
-│   └── validation.ts     # Input validation middleware
-├── modules/
-│   ├── auth/             # Authentication module
-│   ├── doctor/           # Doctor management module
-│   └── Patient/          # Patient management module
-├── utils/
-│   ├── catchAsync.ts     # Async error handler
-│   ├── errors.ts         # Custom error classes
-│   ├── hash.ts           # Password hashing utilities
-│   ├── jwt.ts            # JWT utilities
-│   └── sendResponse.ts   # Response formatter
-└── interface/            # TypeScript interfaces
+job-task-dr-tech/
+├── README.md                                    # Project documentation
+├── package.json                                 # Node.js dependencies and scripts
+├── package-lock.json                           # Locked dependency versions
+├── tsconfig.json                               # TypeScript configuration
+├── .gitignore                                  # Git ignore rules
+├── Dr tech.postman_collection.json             # Postman collection for testing
+└── src/                                        # Source code directory
+    ├── app.ts                                  # Express app configuration
+    ├── server.ts                               # Server entry point
+    ├── middleware/                             # Middleware functions
+    │   ├── auth.ts                            # JWT authentication middleware
+    │   ├── errorHandler.ts                    # Global error handling
+    │   └── validation.ts                      # Input validation middleware
+    ├── modules/                               # Feature modules
+    │   ├── auth/                              # Authentication module
+    │   │   ├── auth.controller.ts             # Auth controller
+    │   │   ├── auth.service.ts                # Auth business logic
+    │   │   ├── auth.interface.ts              # Auth TypeScript interfaces
+    │   │   └── auth.routes.ts                 # Auth routes
+    │   ├── doctor/                            # Doctor management module
+    │   │   ├── doctor.controller.ts           # Doctor controller
+    │   │   ├── doctor.service.ts              # Doctor business logic
+    │   │   ├── doctor.interface.ts            # Doctor TypeScript interfaces
+    │   │   ├── doctor.model.ts                # Doctor MongoDB model
+    │   │   └── doctor.routes.ts               # Doctor routes
+    │   └── Patient/                           # Patient management module
+    │       ├── patient.controller.ts          # Patient controller
+    │       ├── patient.service.ts             # Patient business logic
+    │       ├── patient.interface.ts           # Patient TypeScript interfaces
+    │       ├── patient.model.ts               # Patient MongoDB model
+    │       └── patient.routes.ts              # Patient routes
+    ├── utils/                                 # Utility functions
+    │   ├── catchAsync.ts                      # Async error handler wrapper
+    │   ├── errors.ts                          # Custom error classes
+    │   ├── hash.ts                            # Password hashing utilities
+    │   ├── jwt.ts                             # JWT token utilities
+    │   └── sendResponse.ts                    # Standardized response formatter
+    └── interface/                             # Global TypeScript interfaces
+        └── index.ts                           # Shared interfaces
 ```
+
+### Key Files Description
+
+- **`app.ts`**: Main Express application setup with middleware and route configuration
+- **`server.ts`**: Server startup file that connects to MongoDB and starts the server
+- **`middleware/auth.ts`**: JWT token verification and user authentication
+- **`middleware/validation.ts`**: Request body validation for registration and login
+- **`middleware/errorHandler.ts`**: Global error handling middleware
+- **`modules/*/controller.ts`**: HTTP request handlers and response formatting
+- **`modules/*/service.ts`**: Business logic and database operations
+- **`modules/*/model.ts`**: MongoDB schema definitions and models
+- **`modules/*/routes.ts`**: Express route definitions
+- **`utils/jwt.ts`**: JWT token generation and verification
+- **`utils/hash.ts`**: Password hashing and comparison
+- **`utils/errors.ts`**: Custom error classes for different scenarios
 
 ## 🤝 Contributing
 
@@ -435,4 +481,4 @@ If you encounter any issues or have questions:
 
 ---
 
-**Happy Coding! 🚀** 
+**Happy Coding! 🚀**
