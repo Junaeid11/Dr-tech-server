@@ -88,7 +88,7 @@ Before running this application, make sure you have the following installed:
    NODE_ENV=development
 
    # Database Configuration
-   MONGO_URI=mongodb://localhost:27017/doctor-patient-db
+   MONGO_URI=your_mongodb_uri_here
 
    # JWT Configuration
    JWT_SECRET=your_super_secret_jwt_key_here
