@@ -4,49 +4,29 @@ import { catchAsync } from '../../utils/catchAsync';
 import { sendResponse } from '../../utils/sendResponse';
 import { StatusCodes } from "http-status-codes";
 
-export const getAllDoctors = catchAsync(async (req: Request, res: Response): Promise<void> => {
-  const doctors = await doctorService.getAllDoctors();
-  
-  sendResponse(res, {
-    statusCode: StatusCodes.OK,
-    success: true,
-    message: 'Doctors retrieved successfully!',
-    data: doctors,
-  });
-});
 
-export const getDoctorById = catchAsync(async (req: Request, res: Response): Promise<void> => {
-  const doctor = await doctorService.getDoctorById(req.params.id);
-  
-  sendResponse(res, {
-    statusCode: StatusCodes.OK,
-    success: true,
-    message: 'Doctor retrieved successfully!',
-    data: doctor,
-  });
-});
 
-export const updateDoctor = catchAsync(async (req: Request, res: Response): Promise<void> => {
-  const doctor = await doctorService.updateDoctor({ id: req.params.id, ...req.body });
+// export const updateDoctor = catchAsync(async (req: Request, res: Response): Promise<void> => {
+//   const doctor = await doctorService.updateDoctor({ id: req.params.id, ...req.body });
   
-  sendResponse(res, {
-    statusCode: StatusCodes.OK,
-    success: true,
-    message: 'Doctor updated successfully!',
-    data: doctor,
-  });
-});
+//   sendResponse(res, {
+//     statusCode: StatusCodes.OK,
+//     success: true,
+//     message: 'Doctor updated successfully!',
+//     data: doctor,
+//   });
+// });
 
-export const deleteDoctor = catchAsync(async (req: Request, res: Response): Promise<void> => {
-  const result = await doctorService.deleteDoctor(req.params.id);
+// export const deleteDoctor = catchAsync(async (req: Request, res: Response): Promise<void> => {
+//   const result = await doctorService.deleteDoctor(req.params.id);
   
-  sendResponse(res, {
-    statusCode: StatusCodes.OK,
-    success: true,
-    message: 'Doctor deleted successfully!',
-    data: result,
-  });
-});
+//   sendResponse(res, {
+//     statusCode: StatusCodes.OK,
+//     success: true,
+//     message: 'Doctor deleted successfully!',
+//     data: result,
+//   });
+// });
 
 // Service Management Controllers
 export const addService = catchAsync(async (req: Request, res: Response): Promise<void> => {
@@ -156,3 +136,39 @@ export const updateAppointmentStatus = catchAsync(async (req: Request, res: Resp
     data: appointment,
   });
 });
+export const getAppointmentById = catchAsync(async (req: Request, res: Response): Promise<void> => {
+  const { appointmentId } = req.params;
+
+  const appointment = await doctorService.getAppointmentById(appointmentId);
+
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: 'Appointment retrieved successfully',
+    data: appointment
+  });
+});
+
+export const getAvailableTimeSlots = catchAsync(async (req: Request, res: Response): Promise<void> => {
+  const { doctorId, serviceId, date } = req.params;
+  
+  // Parse the date
+  const parsedDate = new Date(date);
+  if (isNaN(parsedDate.getTime())) {
+    sendResponse(res, {
+      statusCode: StatusCodes.BAD_REQUEST,
+      success: false,
+      message: 'Invalid date format',
+    });
+    return;
+  }
+
+  const availableTimeSlots = await doctorService.getAvailableTimeSlots(doctorId, serviceId, parsedDate);
+
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: 'Available time slots retrieved successfully',
+    data: availableTimeSlots
+  });
+}); 

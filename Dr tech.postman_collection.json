@@ -1,0 +1,428 @@
+{
+	"info": {
+		"_postman_id": "7a212328-fa58-4fa6-80c5-18ea31d06807",
+		"name": "Dr tech",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "46271618"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Register(Doctor)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Dr. John Smith\",\r\n  \"email\": \"john.smith@hospital.com\",\r\n  \"phone\": \"+1234567890\",\r\n  \"password\": \"securepassword123\",\r\n  \"specialization\": \"Cardiology\",\r\n  \"hospitalName\": \"City General Hospital\",\r\n  \"hospitalFloor\": \"3rd Floor\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/auth/register-doctor",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"register-doctor"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register(Patient)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Patient\",\r\n  \"email\": \"patient@email.com\",\r\n  \"phone\": \"+1987654321\",\r\n  \"password\": \"patientpass123\",\r\n  \"age\": 35,\r\n  \"gender\": \"female\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/auth/register-patient",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"register-patient"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n     \"email\": \"patient@email.com\",\r\n     \"password\": \"patientpass123\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/auth/login",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Doctor",
+			"item": [
+				{
+					"name": "add service",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Cardiology Consultation\",\r\n  \"description\": \"Comprehensive heart health evaluation including ECG, blood pressure monitoring, and lifestyle assessment\",\r\n  \"price\": 150.00,\r\n  \"duration\": 45\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/doctors/685fb4627d67786d8a85bb00/services",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"doctors",
+								"685fb4627d67786d8a85bb00",
+								"services"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get service",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Cardiology Consultation\",\r\n  \"description\": \"Comprehensive heart health evaluation including ECG, blood pressure monitoring, and lifestyle assessment\",\r\n  \"price\": 150.00,\r\n  \"duration\": 45\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/doctors/685fb4627d67786d8a85bb00/services",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"doctors",
+								"685fb4627d67786d8a85bb00",
+								"services"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete service",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"title\": \"Cardiology Consultation\",\r\n  \"description\": \"Comprehensive heart health evaluation including ECG, blood pressure monitoring, and lifestyle assessment\",\r\n  \"price\": 150.00,\r\n  \"duration\": 45\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/doctors/services/685fcce93f55b5931cfc27a9",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"doctors",
+								"services",
+								"685fcce93f55b5931cfc27a9"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "set availability",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"serviceId\": \"685fcdd13f55b5931cfc27ae\",\r\n  \"weeklySchedule\": [\r\n    {\r\n      \"day\": \"monday\",\r\n      \"timeSlots\": [\r\n        {\r\n          \"startTime\": \"09:00\",\r\n          \"endTime\": \"11:00\"\r\n        },\r\n        {\r\n          \"startTime\": \"14:00\",\r\n          \"endTime\": \"16:00\"\r\n        }\r\n      ],\r\n      \"isAvailable\": true\r\n    }\r\n  ]\r\n}\r\n  ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/doctors/685fb4627d67786d8a85bb00/availability",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"doctors",
+								"685fb4627d67786d8a85bb00",
+								"availability"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update appointment status",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/doctors/appointments/appointments/{{appointment_id}}/status",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"doctors",
+								"appointments",
+								"appointments",
+								"{{appointment_id}}",
+								"status"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Patient",
+			"item": [
+				{
+					"name": "All Doctors",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{url}}/patients/doctor",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"patients",
+								"doctor"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Single Doctor",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/doctors/685fb4627d67786d8a85bb00",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"doctors",
+								"685fb4627d67786d8a85bb00"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get appoinemnt",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"serviceId\": \"685fcdd13f55b5931cfc27ae\",\r\n  \"weeklySchedule\": [\r\n    {\r\n      \"day\": \"monday\",\r\n      \"timeSlots\": [\r\n        {\r\n          \"startTime\": \"09:00\",\r\n          \"endTime\": \"11:00\"\r\n        },\r\n        {\r\n          \"startTime\": \"14:00\",\r\n          \"endTime\": \"16:00\"\r\n        }\r\n      ],\r\n      \"isAvailable\": true\r\n    }\r\n  ]\r\n}\r\n  "
+						},
+						"url": {
+							"raw": "{{url}}/doctors/685fb4627d67786d8a85bb00/appointments",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"doctors",
+								"685fb4627d67786d8a85bb00",
+								"appointments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get appointments status",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/doctors/685fb4627d67786d8a85bb00/appointments?status=pending",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"doctors",
+								"685fb4627d67786d8a85bb00",
+								"appointments"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "pending"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "book appointment",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"serviceId\": \"{{service_id}}\",\r\n  \"doctorId\": \"686001e471698ff0e994b759\",\r\n  \"scheduledDate\": \"2024-01-20\",\r\n  \"scheduledTime\": \"10:00\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}//patients/appointments",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"",
+								"patients",
+								"appointments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get slot availability",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"serviceId\": \"685fcdd13f55b5931cfc27ae\",\r\n  \"weeklySchedule\": [\r\n    {\r\n      \"day\": \"monday\",\r\n      \"timeSlots\": [\r\n        {\r\n          \"startTime\": \"09:00\",\r\n          \"endTime\": \"11:00\"\r\n        },\r\n        {\r\n          \"startTime\": \"14:00\",\r\n          \"endTime\": \"16:00\"\r\n        }\r\n      ],\r\n      \"isAvailable\": true\r\n    }\r\n  ]\r\n}\r\n  ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/doctors/services/685fcdd13f55b5931cfc27ae/availability",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"doctors",
+								"services",
+								"685fcdd13f55b5931cfc27ae",
+								"availability"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get slot availability",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"serviceId\": \"685fcdd13f55b5931cfc27ae\",\r\n  \"weeklySchedule\": [\r\n    {\r\n      \"day\": \"monday\",\r\n      \"timeSlots\": [\r\n        {\r\n          \"startTime\": \"09:00\",\r\n          \"endTime\": \"11:00\"\r\n        },\r\n        {\r\n          \"startTime\": \"14:00\",\r\n          \"endTime\": \"16:00\"\r\n        }\r\n      ],\r\n      \"isAvailable\": true\r\n    }\r\n  ]\r\n}\r\n  ",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/doctors/services/685fcdd13f55b5931cfc27ae/availability",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"doctors",
+								"services",
+								"685fcdd13f55b5931cfc27ae",
+								"availability"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

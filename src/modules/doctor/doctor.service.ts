@@ -15,69 +15,39 @@ import {
 } from './doctor.interface';
 
 export class DoctorService {
-  async getAllDoctors(): Promise<DoctorResponse[]> {
-    const doctors = await Doctor.find({}, { password: 0 });
-    return doctors.map(doctor => ({
-      id: (doctor._id as any).toString(),
-      name: doctor.name,
-      email: doctor.email,
-      phone: doctor.phone,
-      specialization: doctor.specialization,
-      hospitalName: doctor.hospitalName,
-      hospitalFloor: doctor.hospitalFloor,
-      role: doctor.role
-    }));
-  }
 
-  async getDoctorById(id: string): Promise<DoctorResponse> {
-    const doctor = await Doctor.findById(id, { password: 0 });
-    if (!doctor) {
-      throw new NotFoundError('Doctor not found');
-    }
 
-    return {
-      id: (doctor._id as any).toString(),
-      name: doctor.name,
-      email: doctor.email,
-      phone: doctor.phone,
-      specialization: doctor.specialization,
-      hospitalName: doctor.hospitalName,
-      hospitalFloor: doctor.hospitalFloor,
-      role: doctor.role
-    };
-  }
+  // async updateDoctor(data: DoctorUpdateData): Promise<DoctorResponse> {
+  //   const doctor = await Doctor.findByIdAndUpdate(
+  //     data.id,
+  //     { $set: data },
+  //     { new: true, select: '-password' }
+  //   );
 
-  async updateDoctor(data: DoctorUpdateData): Promise<DoctorResponse> {
-    const doctor = await Doctor.findByIdAndUpdate(
-      data.id,
-      { $set: data },
-      { new: true, select: '-password' }
-    );
+  //   if (!doctor) {
+  //     throw new NotFoundError('Doctor not found');
+  //   }
 
-    if (!doctor) {
-      throw new NotFoundError('Doctor not found');
-    }
+  //   return {
+  //     id: (doctor._id as any).toString(),
+  //     name: doctor.name,
+  //     email: doctor.email,
+  //     phone: doctor.phone,
+  //     specialization: doctor.specialization,
+  //     hospitalName: doctor.hospitalName,
+  //     hospitalFloor: doctor.hospitalFloor,
+  //     role: doctor.role
+  //   };
+  // }
 
-    return {
-      id: (doctor._id as any).toString(),
-      name: doctor.name,
-      email: doctor.email,
-      phone: doctor.phone,
-      specialization: doctor.specialization,
-      hospitalName: doctor.hospitalName,
-      hospitalFloor: doctor.hospitalFloor,
-      role: doctor.role
-    };
-  }
+  // async deleteDoctor(id: string): Promise<{ message: string }> {
+  //   const doctor = await Doctor.findByIdAndDelete(id);
+  //   if (!doctor) {
+  //     throw new NotFoundError('Doctor not found');
+  //   }
 
-  async deleteDoctor(id: string): Promise<{ message: string }> {
-    const doctor = await Doctor.findByIdAndDelete(id);
-    if (!doctor) {
-      throw new NotFoundError('Doctor not found');
-    }
-
-    return { message: 'Doctor deleted successfully' };
-  }
+  //   return { message: 'Doctor deleted successfully' };
+  // }
 
   async addService(data: ServiceData): Promise<ServiceResponse> {
     try {
@@ -171,11 +141,33 @@ export class DoctorService {
   }
 
   async updateAppointmentStatus(appointmentId: string, status: AppointmentStatus, doctorNotes?: string): Promise<AppointmentResponse> {
+    // First, get the current appointment to check its current status
+    const currentAppointment = await Appointment.findById(appointmentId);
+    if (!currentAppointment) {
+      throw new NotFoundError('Appointment not found');
+    }
+
+    const previousStatus = currentAppointment.status;
+    const newStatus = status;
+
+    // Validate status transition
+    if (previousStatus === 'completed' && newStatus !== 'completed') {
+      throw new ValidationError('Cannot change status of a completed appointment');
+    }
+
+    if (previousStatus === 'cancelled' && newStatus !== 'cancelled') {
+      throw new ValidationError('Cannot change status of a cancelled appointment');
+    }
+
+    // Handle time slot availability based on status changes
+    await this.handleTimeSlotAvailability(currentAppointment, previousStatus, newStatus);
+
+    // Update the appointment status
     const appointment = await Appointment.findByIdAndUpdate(
       appointmentId,
       { 
-        status,
-        ...(doctorNotes && { doctorNotes })
+        status: newStatus,
+        doctorNotes: doctorNotes || currentAppointment.doctorNotes
       },
       { new: true }
     ).populate('serviceId', 'title')
@@ -183,6 +175,112 @@ export class DoctorService {
 
     if (!appointment) {
       throw new NotFoundError('Appointment not found');
+    }
+
+    return appointment;
+  }
+
+  /**
+   * Handle time slot availability based on appointment status changes
+   */
+  private async handleTimeSlotAvailability(
+    appointment: IAppointment, 
+    previousStatus: AppointmentStatus, 
+    newStatus: AppointmentStatus
+  ): Promise<void> {
+    const { doctorId, serviceId, scheduledDate, scheduledTime } = appointment;
+
+    // If status is changing from pending to accepted, check if time slot is still available
+    if (previousStatus === 'pending' && newStatus === 'accepted') {
+      const conflictingAppointment = await Appointment.findOne({
+        doctorId,
+        scheduledDate,
+        scheduledTime,
+        status: { $in: ['accepted', 'pending'] },
+        _id: { $ne: appointment._id }
+      });
+
+      if (conflictingAppointment) {
+        throw new ValidationError('This time slot is no longer available. It may have been booked by another patient.');
+      }
+    }
+
+    // If status is changing from accepted to cancelled, the time slot becomes available again
+    // If status is changing from pending to cancelled, the time slot becomes available again
+    if ((previousStatus === 'accepted' || previousStatus === 'pending') && newStatus === 'cancelled') {
+      // Time slot becomes available again - no action needed as we don't block other bookings
+      // The booking validation in bookAppointment will handle this
+    }
+
+    // If status is changing from pending to accepted, the time slot becomes unavailable
+    if (previousStatus === 'pending' && newStatus === 'accepted') {
+      // Time slot becomes unavailable - this is handled by the booking validation
+      // which checks for existing accepted/pending appointments
+    }
+
+    // If status is changing from cancelled to accepted, check availability again
+    if (previousStatus === 'cancelled' && newStatus === 'accepted') {
+      const conflictingAppointment = await Appointment.findOne({
+        doctorId,
+        scheduledDate,
+        scheduledTime,
+        status: { $in: ['accepted', 'pending'] },
+        _id: { $ne: appointment._id }
+      });
+
+      if (conflictingAppointment) {
+        throw new ValidationError('This time slot is no longer available. It may have been booked by another patient.');
+      }
+    }
+  }
+
+  /**
+   * Get available time slots for a specific date and doctor
+   */
+  async getAvailableTimeSlots(doctorId: string, serviceId: string, date: Date): Promise<string[]> {
+    // Get the doctor's availability for this service
+    const availability = await Availability.findOne({ doctorId, serviceId });
+    if (!availability) {
+      throw new NotFoundError('No availability set for this doctor and service');
+    }
+
+    // Get the day of the week (0 = Sunday, 1 = Monday, etc.)
+    const dayOfWeek = date.getDay();
+    const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+    const dayName = dayNames[dayOfWeek];
+
+    // Find the day's schedule
+    const daySchedule = availability.weeklySchedule.find(schedule => schedule.day === dayName);
+    if (!daySchedule || !daySchedule.isAvailable) {
+      return []; // No availability for this day
+    }
+
+    // Get all booked time slots for this date
+    const bookedAppointments = await Appointment.find({
+      doctorId,
+      scheduledDate: date,
+      status: { $in: ['pending', 'accepted'] }
+    });
+
+    const bookedTimeSlots = bookedAppointments.map(appointment => appointment.scheduledTime);
+
+    // Filter out booked time slots from available time slots
+    const availableTimeSlots = daySchedule.timeSlots
+      .map(slot => slot.startTime)
+      .filter(timeSlot => !bookedTimeSlots.includes(timeSlot));
+
+    return availableTimeSlots;
+  }
+
+  // Get appointment by ID
+  async getAppointmentById(appointmentId: string): Promise<IAppointment> {
+    const appointment = await Appointment.findById(appointmentId)
+      .populate('doctorId', 'name specialization hospitalName')
+      .populate('patientId', 'name email phone')
+      .populate('serviceId', 'name description price');
+
+    if (!appointment) {
+      throw new Error('Appointment not found');
     }
 
     return appointment;

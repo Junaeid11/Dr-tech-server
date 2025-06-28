@@ -17,6 +17,7 @@ app.use('/auth', authRoutes);
 app.use('/doctors', doctorRoutes);
 app.use('/patients', patientRoutes);
 
+
 // Error handling middleware (should be last)
 app.use(errorHandler);
 

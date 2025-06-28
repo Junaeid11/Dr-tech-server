@@ -1,3 +1,4 @@
+import { Schema, Document } from 'mongoose';
 export interface PatientData {
   name: string;
   email: string;
